@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/walkert/cider"
+	"github.com/walkert/pager"
 	"os"
 )
 
@@ -12,7 +13,6 @@ func exit(err error) {
 		fmt.Fprintf(os.Stderr, "Error: %s\n", err)
 		os.Exit(1)
 	}
-	os.Exit(0)
 }
 
 func main() {
@@ -29,14 +29,15 @@ func main() {
 		os.Exit(1)
 	}
 	cidr := flag.Arg(0)
+	var err error
+	output := pager.New()
 	if *s > 1 {
-		err := cider.PrintSubnetsFor(cidr, *s, os.Stdout)
-		exit(err)
+		err = cider.PrintSubnetsFor(cidr, *s, output)
+	} else if *a {
+		err = cider.PrintAllSubnets(cidr, output)
+	} else {
+		err = cider.PrintNetwork(cidr, output)
 	}
-	if *a {
-		err := cider.PrintAllSubnets(cidr, os.Stdout)
-		exit(err)
-	}
-	err := cider.PrintNetwork(cidr, os.Stdout)
 	exit(err)
+	output.Page()
 }
