@@ -159,3 +159,16 @@ func PrintSubnetsFor(cidr string, segment int, output io.Writer) error {
 	}
 	return nil
 }
+
+// IsInNet returns a boolean to indicate whether an IP is in a CIDR block
+func IsInNet(ip, cidr string) (bool, error) {
+	inNet, err := Details(cidr)
+	if err != nil {
+		return false, err
+	}
+	ipNet, err := Details(fmt.Sprintf("%s/%d", ip, inNet.MaskSize))
+	if err != nil {
+		return false, err
+	}
+	return inNet.Net.Equal(ipNet.Net), nil
+}

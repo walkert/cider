@@ -7,8 +7,9 @@
 The tool expects a CIDR block as input and behaves as follows:
 
  - With no additional arguments, display information about the network block
- - With `-s SIZE`, display all CIDR blocks of `SIZE` than can fit within the network
  - With `-a`, list all CIDR blocks which can fit within the network
+ - With `-i IP`, check whether IP is part of the network
+ - With `-s SIZE`, display all CIDR blocks of `SIZE` than can fit within the network
 
 ## Installation
 
@@ -55,4 +56,10 @@ $ cider -a 192.168.0.0/27
 192.168.0.8/28
 192.168.0.16/28
 192.168.0.24/28
+```
+
+Check whether 192.168.0.237 is part of the 192.168.0.0/24 CIDR block:
+```
+$ cider -i 192.168.0.237 192.168.0.0/24
+IP 192.168.0.237 is in CIDR 192.168.0.0/24
 ```

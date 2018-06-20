@@ -82,6 +82,23 @@ var PrintAllSubnetsTests = []struct {
 	},
 }
 
+var IsInNetTests = []struct {
+	cidr string
+	ip   string
+	want bool
+}{
+	{
+		"192.168.1.0/27",
+		"10.1.134.124",
+		false,
+	},
+	{
+		"192.168.1.0/27",
+		"192.168.1.1",
+		true,
+	},
+}
+
 func TestPrintNetwork(t *testing.T) {
 	for _, tt := range PrintNetworkTests {
 		buf := &bytes.Buffer{}
@@ -135,6 +152,15 @@ func TestPrintAllSubnets(t *testing.T) {
 			if buf.String() != tt.want {
 				t.Fatalf("Wanted:\n%s\nGot:\n%s\n", tt.want, buf.String())
 			}
+		}
+	}
+}
+
+func TestIsInNet(t *testing.T) {
+	for _, tt := range IsInNetTests {
+		got, _ := IsInNet(tt.ip, tt.cidr)
+		if got != tt.want {
+			t.Fatalf("Wanted: %s\nGot:%s\n", tt.want, got)
 		}
 	}
 }
